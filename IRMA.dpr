@@ -6,7 +6,8 @@ uses
   uBerkas in 'uBerkas.pas' {frmBerkas},
   uBerkasMutasi in 'uBerkasMutasi.pas' {frmBerkasMutasi},
   uBerkasScan in 'uBerkasScan.pas' {frmBerkasScan},
-  uDM in 'uDM.pas' {DM: TDataModule};
+  uDM in 'uDM.pas' {DM: TDataModule},
+  _uStringGrid in '_uStringGrid.pas';
 
 {$R *.res}
 

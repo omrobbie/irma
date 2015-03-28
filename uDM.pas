@@ -14,6 +14,8 @@ type
     qry1: TADOQuery;
     cnn2: TADOConnection;
     qry2: TADOQuery;
+    cnn3: TADOConnection;
+    qry3: TADOQuery;
   private
     { Private declarations }
   public
@@ -54,7 +56,7 @@ begin
   except
     Connection.RollbackTrans;
   end;
-  if Query.Active then Result:= True;
+  if Query.Active then if Query.RecordCount > 0 then Result:= True;
 end;
 
 end.

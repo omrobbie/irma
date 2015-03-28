@@ -12,10 +12,8 @@ type
     txtRM: TEdit;
     Label1: TLabel;
     lblNama: TLabel;
-    btnBerkas: TButton;
     procedure FormActivate(Sender: TObject);
     procedure btnToggleClick(Sender: TObject);
-    procedure btnBerkasClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -57,11 +55,6 @@ begin
   lblNama.Caption:= '';
   txtRM.Text:= '';
   txtRM.SetFocus;
-end;
-
-procedure TfrmBerkasScan.btnBerkasClick(Sender: TObject);
-begin
-  frmBerkas.ShowModal;
 end;
 
 end.
