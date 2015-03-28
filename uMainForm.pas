@@ -43,7 +43,6 @@ type
     { Private declarations }
   public
     { Public declarations }
-    procedure ClearList();
     procedure LoadData();
   end;
 
@@ -60,15 +59,6 @@ var
   __CFG_TIMER_INTERVAL: Integer;
   tmrCnt: Integer;
 
-procedure TMainForm.ClearList();
-begin
-  with lstResult do
-  begin
-    ClearNormalCells;
-    RowCount:= 2;
-  end;
-end;
-
 procedure TMainForm.LoadData();
 var
   i, iCnt: Integer;
@@ -82,7 +72,7 @@ begin
   DM.runQuery(DM.cnn2, DM.qry2, 'update rm set ada=false', eExecute);
 
   //note: load data pasien aktif saat ini di sirus
-  if DM.runQuery(DM.cnn1, DM.qry1, 'select norm, nama, lokasi from msttblreg', eOpen, DBSQLServer) then
+  if DM.runQuery(DM.cnn1, DM.qry1, 'select norm,nama,lokasi from msttblreg', eOpen, DBSQLServer) then
   begin
     DM.qry1.First;
     for i:= 1 to DM.qry1.RecordCount do
@@ -94,8 +84,8 @@ begin
       //note: cek apakah no rm tersebut tidak ada di tabel rm
       if not DM.runQuery(DM.cnn2, DM.qry2, 'select idrm from rm where norm='+QuotedStr(DM.qry1.FieldByName('norm').AsString)) then
       begin
-        DM.runQuery(DM.cnn2, DM.qry2, 'insert into rm(norm,nama,lokasi) values('+
-            QuotedStr(sNoRM)+','+QuotedStr(sNama)+','+QuotedStr(sLokasi)+')', eExecute);
+        DM.runQuery(DM.cnn2, DM.qry2, 'insert into rm(norm,nama,lokasi,norak) values('+
+            QuotedStr(sNoRM)+','+QuotedStr(sNama)+','+QuotedStr(sLokasi)+',0)', eExecute);
       end;
 
       //note: cek apakah no rm tersebut ada di tabel detil
@@ -122,7 +112,7 @@ begin
   end;
 
   //note: load data untuk ditampilkan
-  DM.runQuery(DM.cnn1, DM.qry1, 'select idrm,norm,nama,lokasi,norak from rm where ada=true');
+  DM.runQuery(DM.cnn1, DM.qry1, 'select idrm,norm,nama,lokasi,norak from rm where ada=true order by norm');
   with lstResult do
   begin
     ClearStringGrid(lstResult);
@@ -143,7 +133,7 @@ begin
     end;
   end;
 
-  //note: refresh lampu rak
+  //todo: refresh lampu rak
   btnRefresh.Caption:= 'Finish!';
   btnRefresh.Enabled:=True;
   tmrRefresh.Enabled:=True;
@@ -192,7 +182,7 @@ end;
 procedure TMainForm.lstResultDblClick(Sender: TObject);
 begin
   //todo: tampilkan data yang terseleksi pada form manajemen berkas
-  lstResult.Cells[0, lstResult.Row];
+  frmBerkas.CariBerkas(lstResult.Cells[0, lstResult.Row]);
 end;
 
 end.

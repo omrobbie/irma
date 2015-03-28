@@ -54,6 +54,15 @@ object frmBerkas: TfrmBerkas
       TabOrder = 2
       OnClick = btnHapusClick
     end
+    object txtID: TEdit
+      Left = 88
+      Top = 8
+      Width = 73
+      Height = 24
+      Color = clYellow
+      TabOrder = 3
+      Visible = False
+    end
   end
   object Panel2: TPanel
     Left = 0
