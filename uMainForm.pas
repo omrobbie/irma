@@ -38,6 +38,7 @@ type
     procedure BerkasKeluarMasuk1Click(Sender: TObject);
     procedure ManajemenBerkas1Click(Sender: TObject);
     procedure MutasiBerkas1Click(Sender: TObject);
+    procedure lstResultDblClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -51,7 +52,7 @@ var
 
 implementation
 
-uses uDM, uBerkas, uBerkasMutasi, uBerkasScan, ADODB, DB;
+uses _uStringGrid, uDM, uBerkas, uBerkasMutasi, uBerkasScan, ADODB, DB;
 
 {$R *.dfm}
 
@@ -71,45 +72,78 @@ end;
 procedure TMainForm.LoadData();
 var
   i, iCnt: Integer;
+  sNoRM, sNama, sLokasi: string;
 begin
   tmrRefresh.Enabled:=False;
   btnRefresh.Enabled:=False;
   btnRefresh.Caption:= 'Loading...';
 
-  //todo: load data pendaftaran dari sirus
+  //note: kosongkan status berkas rm
+  DM.runQuery(DM.cnn2, DM.qry2, 'update rm set ada=false', eExecute);
 
-  if DM.runQuery(DM.cnn1, DM.qry1, 'select * from msttblreg', eOpen, DBSQLServer) then
+  //note: load data pasien aktif saat ini di sirus
+  if DM.runQuery(DM.cnn1, DM.qry1, 'select norm, nama, lokasi from msttblreg', eOpen, DBSQLServer) then
   begin
     DM.qry1.First;
     for i:= 1 to DM.qry1.RecordCount do
     begin
-      if DM.runQuery(DM.cnn2, DM.qry2, 'select * from rm where norm='+QuotedStr(DM.qry1.FieldByName('norm').AsString)) then
+      sNoRM:= DM.qry1.FieldByName('norm').AsString;
+      sNama:= DM.qry1.FieldByName('nama').AsString;
+      sLokasi:= DM.qry1.FieldByName('lokasi').AsString;
+
+      //note: cek apakah no rm tersebut tidak ada di tabel rm
+      if not DM.runQuery(DM.cnn2, DM.qry2, 'select idrm from rm where norm='+QuotedStr(DM.qry1.FieldByName('norm').AsString)) then
       begin
-        if DM.qry2.RecordCount > 0 then DM.runQuery(DM.cnn2, DM.qry2, 'update rm set tampil=true', eExecute)
-        else DM.runQuery(DM.cnn2, DM.qry2, 'insert into rm(norm,nama,tampil) values('+QuotedStr(DM.qry1.FieldByName('norm').AsString)+','+QuotedStr(DM.qry1.FieldByName('nama').AsString)+',true)', eExecute);
+        DM.runQuery(DM.cnn2, DM.qry2, 'insert into rm(norm,nama,lokasi) values('+
+            QuotedStr(sNoRM)+','+QuotedStr(sNama)+','+QuotedStr(sLokasi)+')', eExecute);
+      end;
+
+      //note: cek apakah no rm tersebut ada di tabel detil
+      if DM.runQuery(DM.cnn2, DM.qry2, 'select top 1 rm.idrm,detil.ada from detil inner join rm on detil.idrm=rm.idrm where rm.norm='+QuotedStr(DM.qry1.FieldByName('norm').AsString)+' order by detil.iddetil desc') then
+      begin
+        //note: perbaharui data rm
+        DM.runQuery(DM.cnn3, DM.qry3, 'update rm set nama='+QuotedStr(sNama)+',lokasi='+QuotedStr(sLokasi)+',ada='+DM.qry2.FieldByName('ada').AsString+
+            ' where idrm='+DM.qry2.FieldByName('idrm').AsString, eExecute);
+      end else
+      begin
+        //note: bikin data detil yang baru dengan status ada=true
+        if DM.qry2.RecordCount = 0 then
+        begin
+          if DM.runQuery(DM.cnn2, DM.qry2, 'select idrm from rm where norm='+QuotedStr(sNoRM)) then
+          begin
+            DM.runQuery(DM.cnn3, DM.qry3, 'insert into detil(idrm,tanggal,lokasi,ada) values('+
+                DM.qry2.FieldByName('idrm').AsString+',now(),'+QuotedStr(sLokasi)+',true)', eExecute);
+            DM.runQuery(DM.cnn3, DM.qry3, 'update rm set ada=true where idrm='+DM.qry2.FieldByName('idrm').AsString, eExecute);
+          end;
+        end;
       end;
       DM.qry1.Next;
     end;
   end;
 
-  DM.runQuery(DM.cnn1, DM.qry1, 'select * from rm where tampil=true');
+  //note: load data untuk ditampilkan
+  DM.runQuery(DM.cnn1, DM.qry1, 'select idrm,norm,nama,lokasi,norak from rm where ada=true');
   with lstResult do
   begin
-    iCnt:= DM.qry1.RecordCount;
-    RowCount:= iCnt + 1;
-    DM.qry1.First;
-    for i:= 1 to iCnt do
+    ClearStringGrid(lstResult);
+    if DM.qry1.RecordCount > 0 then
     begin
-      Cells[0,i]:= DM.qry1.Fields[1].AsString;
-      Cells[1,i]:= DM.qry1.Fields[2].AsString;
-      Cells[2,i]:= DM.qry1.Fields[3].AsString;
-      //Cells[3,i]:= DM.qry1.Fields[4].AsString;
-      DM.qry1.Next;
+      iCnt:= DM.qry1.RecordCount;
+      RowCount:= iCnt + 1;
+      DM.qry1.First;
+      for i:= 1 to iCnt do
+      begin
+        Cells[0,i]:= DM.qry1.Fields[0].AsString;
+        Cells[1,i]:= DM.qry1.Fields[1].AsString;
+        Cells[2,i]:= DM.qry1.Fields[2].AsString;
+        Cells[3,i]:= DM.qry1.Fields[3].AsString;
+        Cells[4,i]:= DM.qry1.Fields[4].AsString;
+        DM.qry1.Next;
+      end;
     end;
   end;
 
-  //todo: refresh lampu rak
-
+  //note: refresh lampu rak
   btnRefresh.Caption:= 'Finish!';
   btnRefresh.Enabled:=True;
   tmrRefresh.Enabled:=True;
@@ -119,6 +153,9 @@ end;
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
   __CFG_TIMER_INTERVAL:= 20;
+
+  //note: sembunyikan kolom idrm
+  lstResult.HideColumn(0);
 end;
 
 procedure TMainForm.tmrRefreshTimer(Sender: TObject);
@@ -150,6 +187,12 @@ end;
 procedure TMainForm.MutasiBerkas1Click(Sender: TObject);
 begin
   frmBerkasMutasi.ShowModal;
+end;
+
+procedure TMainForm.lstResultDblClick(Sender: TObject);
+begin
+  //todo: tampilkan data yang terseleksi pada form manajemen berkas
+  lstResult.Cells[0, lstResult.Row];
 end;
 
 end.

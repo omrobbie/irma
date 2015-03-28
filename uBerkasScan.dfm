@@ -4,7 +4,7 @@ object frmBerkasScan: TfrmBerkasScan
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Berkas Keluar/Masuk'
-  ClientHeight = 225
+  ClientHeight = 178
   ClientWidth = 305
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
@@ -58,15 +58,5 @@ object frmBerkasScan: TfrmBerkasScan
     Font.Style = []
     ParentFont = False
     TabOrder = 1
-  end
-  object btnBerkas: TButton
-    Left = 8
-    Top = 176
-    Width = 289
-    Height = 41
-    Cursor = crHandPoint
-    Caption = 'Manajemen Berkas'
-    TabOrder = 2
-    OnClick = btnBerkasClick
   end
 end

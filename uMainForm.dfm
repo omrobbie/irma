@@ -5,7 +5,7 @@ object MainForm: TMainForm
   BorderStyle = bsSingle
   Caption = 'Indikator Rekam Medis Analog'
   ClientHeight = 546
-  ClientWidth = 492
+  ClientWidth = 491
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -571,7 +571,7 @@ object MainForm: TMainForm
   object StatusBar1: TStatusBar
     Left = 0
     Top = 520
-    Width = 492
+    Width = 491
     Height = 26
     Panels = <
       item
@@ -583,7 +583,7 @@ object MainForm: TMainForm
   object Panel1: TPanel
     Left = 0
     Top = 0
-    Width = 492
+    Width = 491
     Height = 97
     Align = alTop
     Caption = 'IRMA'
@@ -598,7 +598,7 @@ object MainForm: TMainForm
   object Panel2: TPanel
     Left = 0
     Top = 97
-    Width = 492
+    Width = 491
     Height = 423
     Align = alClient
     BorderWidth = 5
@@ -606,7 +606,7 @@ object MainForm: TMainForm
     object Panel3: TPanel
       Left = 6
       Top = 6
-      Width = 480
+      Width = 479
       Height = 43
       Align = alTop
       BevelOuter = bvNone
@@ -635,30 +635,39 @@ object MainForm: TMainForm
     object lstResult: TAdvStringGrid
       Left = 6
       Top = 49
-      Width = 480
+      Width = 479
       Height = 368
       Cursor = crHandPoint
       Align = alClient
-      ColCount = 4
       FixedCols = 0
       RowCount = 2
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goRowSelect]
       ScrollBars = ssVertical
       TabOrder = 1
+      OnDblClick = lstResultDblClick
       ActiveCellFont.Charset = DEFAULT_CHARSET
       ActiveCellFont.Color = clWindowText
       ActiveCellFont.Height = -11
       ActiveCellFont.Name = 'Tahoma'
       ActiveCellFont.Style = [fsBold]
+      ActiveCellColor = 15387318
       ColumnHeaders.Strings = (
+        'idRM'
         'No. RM'
         'Nama'
         'Lokasi'
         'No. Rak')
-      ControlLook.FixedGradientHoverFrom = clGray
-      ControlLook.FixedGradientHoverTo = clWhite
-      ControlLook.FixedGradientDownFrom = clGray
-      ControlLook.FixedGradientDownTo = clSilver
+      ControlLook.FixedGradientFrom = clWhite
+      ControlLook.FixedGradientTo = clBtnFace
+      ControlLook.FixedGradientHoverFrom = 13619409
+      ControlLook.FixedGradientHoverTo = 12502728
+      ControlLook.FixedGradientHoverMirrorFrom = 12502728
+      ControlLook.FixedGradientHoverMirrorTo = 11254975
+      ControlLook.FixedGradientDownFrom = 8816520
+      ControlLook.FixedGradientDownTo = 7568510
+      ControlLook.FixedGradientDownMirrorFrom = 7568510
+      ControlLook.FixedGradientDownMirrorTo = 6452086
+      ControlLook.FixedGradientDownBorder = 14007466
       ControlLook.DropDownHeader.Font.Charset = DEFAULT_CHARSET
       ControlLook.DropDownHeader.Font.Color = clWindowText
       ControlLook.DropDownHeader.Font.Height = -11
@@ -680,7 +689,9 @@ object MainForm: TMainForm
       FilterDropDown.Font.Name = 'MS Sans Serif'
       FilterDropDown.Font.Style = []
       FilterDropDownClear = '(All)'
+      FixedColWidth = 2
       FixedRowHeight = 22
+      FixedRowAlways = True
       FixedFont.Charset = DEFAULT_CHARSET
       FixedFont.Color = clGreen
       FixedFont.Height = -11
@@ -710,6 +721,7 @@ object MainForm: TMainForm
       PrintSettings.FooterFont.Style = []
       PrintSettings.PageNumSep = '/'
       ScrollBarAlways = saVert
+      SearchFooter.ColorTo = 14215660
       SearchFooter.FindNextCaption = 'Find &next'
       SearchFooter.FindPrevCaption = 'Find &previous'
       SearchFooter.Font.Charset = DEFAULT_CHARSET
@@ -724,11 +736,15 @@ object MainForm: TMainForm
       SearchFooter.HintHighlight = 'Highlight occurrences'
       SearchFooter.MatchCaseCaption = 'Match case'
       ShowDesignHelper = False
+      SortSettings.HeaderColorTo = 16579058
+      SortSettings.HeaderMirrorColor = 16380385
+      SortSettings.HeaderMirrorColorTo = 16182488
       Version = '6.0.0.1'
       ColWidths = (
+        2
+        62
+        267
         64
-        250
-        80
         64)
       RowHeights = (
         22
