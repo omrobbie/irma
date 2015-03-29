@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ExtCtrls, ComCtrls, Menus, frxpngimage, sSkinManager,
-  Grids, AdvObj, BaseGrid, AdvGrid, DBAdvGrid;
+  Grids, AdvObj, BaseGrid, AdvGrid, DBAdvGrid, frxClass;
 
 type
   TMainForm = class(TForm)
@@ -31,6 +31,7 @@ type
     sSkinManager1: TsSkinManager;
     lstResult: TAdvStringGrid;
     btnBerkasKeluarMasuk: TButton;
+    frxReport1: TfrxReport;
     procedure FormCreate(Sender: TObject);
     procedure tmrRefreshTimer(Sender: TObject);
     procedure btnRefreshClick(Sender: TObject);

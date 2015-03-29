@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TfrxReport Version="4.10.5" DotMatrixReport="False" IniFile="\Software\Fast Reports" PreviewOptions.Buttons="4095" PreviewOptions.Zoom="1" PrintOptions.Printer="Default" PrintOptions.PrintOnSheet="0" ReportOptions.CreateDate="42092.8819084491" ReportOptions.Description.Text="" ReportOptions.LastChange="42092.8996629051" ScriptLanguage="PascalScript" ScriptText.Text="begin&#13;&#10;&#13;&#10;end." PropData="044C656674020803546F7002710844617461736574730100095661726961626C65730100055374796C650100">
+  <TfrxDataPage Name="Data" Height="1000" Left="0" Top="0" Width="1000"/>
+  <TfrxReportPage Name="Page1" PaperWidth="216" PaperHeight="279" PaperSize="1" LeftMargin="2" RightMargin="2" TopMargin="2" BottomMargin="2" ColumnWidth="0" ColumnPositions.Text="" HGuides.Text="" VGuides.Text="">
+    <TfrxMemoView Name="Barcode" Left="0" Top="0" Width="188.9765" Height="37.7953" ShowHint="False" Font.Charset="1" Font.Color="0" Font.Height="-32" Font.Name="Arial" Font.Style="0" ParentFont="False" Text="12.34.56"/>
+    <TfrxMemoView Name="Nama" Left="0" Top="37.7953" Width="188.9765" Height="37.7953" ShowHint="False" Font.Charset="1" Font.Color="0" Font.Height="-13" Font.Name="Arial" Font.Style="0" ParentFont="False" WordBreak="True" Text="I Putu Roby Irawan, S.Kom"/>
+  </TfrxReportPage>
+</TfrxReport>

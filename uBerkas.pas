@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, ExtCtrls, Grids, AdvObj, BaseGrid, AdvGrid;
+  Dialogs, StdCtrls, ExtCtrls, Grids, AdvObj, BaseGrid, AdvGrid, frxClass;
 
 type
   TfrmBerkas = class(TForm)
@@ -78,7 +78,7 @@ var
   i, iCnt: Integer;
   sSQL, sWhere, sOrder: string;
 begin
-  //berdasarkan: 0=norm, 1=nama, 2=norak
+  //note: berdasarkan: 0=norm, 1=nama, 2=norak
   case Berdasarkan of
     0: begin
       sWhere:= 'norm like '+QuotedStr('%'+frmBerkas.txtCari.Text+'%');
@@ -192,7 +192,15 @@ end;
 
 procedure TfrmBerkas.btnCetakBarcodeClick(Sender: TObject);
 begin
-  //todo: cetak barcode
+  //note: cetak barcode
+  if txtID.Text = '' then Exit;
+  with MainForm.frxReport1 do
+  begin
+    LoadFromFile('rptBarcode.fr3');
+    CetakMemo('barcode',txtRM.Text);
+    CetakMemo('nama', txtNama.Text);
+    ShowReport;
+  end;
 end;
 
 procedure TfrmBerkas.btnDetilClick(Sender: TObject);

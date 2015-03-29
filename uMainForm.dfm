@@ -3002,4 +3002,25 @@ object MainForm: TMainForm
     Left = 8
     Top = 64
   end
+  object frxReport1: TfrxReport
+    Version = '4.10.5'
+    DotMatrixReport = False
+    IniFile = '\Software\Fast Reports'
+    PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]
+    PreviewOptions.Zoom = 1.000000000000000000
+    PrintOptions.Printer = 'Default'
+    PrintOptions.PrintOnSheet = 0
+    ReportOptions.CreateDate = 42092.900445960650000000
+    ReportOptions.LastChange = 42092.900445960650000000
+    ScriptLanguage = 'PascalScript'
+    ScriptText.Strings = (
+      'begin'
+      ''
+      'end.')
+    Left = 40
+    Top = 64
+    Datasets = <>
+    Variables = <>
+    Style = <>
+  end
 end

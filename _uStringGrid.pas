@@ -5,10 +5,11 @@ interface
 uses AdvGrid;
 
 procedure ClearStringGrid(Grid: TAdvStringGrid);
+procedure CetakMemo(sObj, sMemo: String);
 
 implementation
 
-uses Classes;
+uses Classes, frxclass, uMainForm;
 
 procedure ClearStringGrid(Grid: TAdvStringGrid);
 var
@@ -21,6 +22,14 @@ begin
     Clear;
     ColumnHeaders.Text:= sHeader;
   end;
+end;
+
+procedure CetakMemo(sObj, sMemo: String);
+var
+  vMemo: TfrxMemoView;
+begin
+  vMemo:= TfrxMemoView(MainForm.frxReport1.FindObject(sObj));
+  vMemo.Memo.Text:= sMemo;
 end;
 
 end.
