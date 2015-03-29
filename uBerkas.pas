@@ -28,6 +28,7 @@ type
     cmbCari: TComboBox;
     txtID: TEdit;
     lstRM: TAdvStringGrid;
+    lstDetil: TAdvStringGrid;
     procedure FormCreate(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure btnBaruClick(Sender: TObject);
@@ -68,6 +69,7 @@ begin
     txtRM.Text:= '';
     txtNama.Text:= '';
     txtRak.Text:= '';
+    lstDetil.Visible:= False;
   end;
 end;
 
@@ -114,6 +116,7 @@ procedure TfrmBerkas.CariBerkas(idRM:string);
 begin
   //note: cek apakah data idrm ada di tabel rm
   FormClear;
+  if idRM = '' then Exit;
   DM.runQuery(DM.cnn1, DM.qry1, 'select idrm,norm,nama,norak from rm where idrm='+idRM);
   if DM.qry1.RecordCount > 0 then
   begin
@@ -133,7 +136,7 @@ end;
 procedure TfrmBerkas.FormActivate(Sender: TObject);
 begin
   bDetil:= False;
-  //lstDetil.Visible:= bDetil;
+  lstDetil.Visible:= bDetil;
   btnDetil.Caption:= 'Lihat Detil';
   LoadData;
 end;
@@ -189,17 +192,38 @@ end;
 
 procedure TfrmBerkas.btnCetakBarcodeClick(Sender: TObject);
 begin
-  //todo: scan barcode
+  //todo: cetak barcode
 end;
 
 procedure TfrmBerkas.btnDetilClick(Sender: TObject);
+var
+  i, iCnt: Integer;
 begin
-  //todo: tampilkan data detil keluar/masuk berkas
+  //note: tampilkan data detil keluar/masuk berkas
   bDetil:= not bDetil;
-  //lstDetil.Visible:= bDetil;
+  lstDetil.Visible:= bDetil;
 
   if bDetil then btnDetil.Caption:= 'Sembunyikan'
   else btnDetil.Caption:= 'Lihat Detil';
+
+  if bDetil then
+  begin
+    DM.runQuery(DM.cnn1, DM.qry1, 'select tanggal,lokasi,iif(ada,"<<","          >>") from detil where idrm='+txtID.Text+' order by iddetil desc');
+    ClearStringGrid(lstDetil);
+    iCnt:= DM.qry1.RecordCount;
+    if iCnt > 0 then
+    begin
+      lstDetil.RowCount:= iCnt + 1;
+      DM.qry1.First;
+      for i:= 1 to iCnt do
+      begin
+        lstDetil.Cells[0,i]:= DM.qry1.Fields[0].AsString;
+        lstDetil.Cells[1,i]:= DM.qry1.Fields[1].AsString;
+        lstDetil.Cells[2,i]:= DM.qry1.Fields[2].AsString;
+        DM.qry1.Next;
+      end;
+    end;
+  end;
 end;
 
 procedure TfrmBerkas.cmbCariChange(Sender: TObject);
