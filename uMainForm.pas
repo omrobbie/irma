@@ -116,9 +116,9 @@ begin
   with lstResult do
   begin
     ClearStringGrid(lstResult);
-    if DM.qry1.RecordCount > 0 then
+    iCnt:= DM.qry1.RecordCount;
+    if iCnt > 0 then
     begin
-      iCnt:= DM.qry1.RecordCount;
       RowCount:= iCnt + 1;
       DM.qry1.First;
       for i:= 1 to iCnt do
@@ -181,7 +181,7 @@ end;
 
 procedure TMainForm.lstResultDblClick(Sender: TObject);
 begin
-  //todo: tampilkan data yang terseleksi pada form manajemen berkas
+  //note: tampilkan data yang terseleksi pada form manajemen berkas
   frmBerkas.CariBerkas(lstResult.Cells[0, lstResult.Row]);
 end;
 

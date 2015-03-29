@@ -640,7 +640,7 @@ object MainForm: TMainForm
       Cursor = crHandPoint
       Align = alClient
       FixedCols = 0
-      RowCount = 2
+      RowCount = 1
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goRowSelect]
       ScrollBars = ssVertical
       TabOrder = 1
@@ -747,7 +747,6 @@ object MainForm: TMainForm
         64
         64)
       RowHeights = (
-        22
         22)
     end
   end
