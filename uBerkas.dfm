@@ -98,6 +98,7 @@ object frmBerkas: TfrmBerkas
       Top = 8
       Width = 241
       Height = 24
+      Enabled = False
       TabOrder = 0
       OnKeyPress = txtRMKeyPress
     end
@@ -106,6 +107,7 @@ object frmBerkas: TfrmBerkas
       Top = 40
       Width = 241
       Height = 24
+      Enabled = False
       TabOrder = 1
       OnKeyPress = txtNamaKeyPress
     end

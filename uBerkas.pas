@@ -70,6 +70,8 @@ begin
     txtNama.Text:= '';
     txtRak.Text:= '';
     lstDetil.Visible:= False;
+    txtRM.Enabled:= false;
+    txtNama.Enabled:= false;
   end;
 end;
 
@@ -144,6 +146,8 @@ end;
 procedure TfrmBerkas.btnBaruClick(Sender: TObject);
 begin
   FormClear;
+  txtRM.Enabled:= true;
+  txtNama.Enabled:= true;
   txtRM.SetFocus;
 end;
 
@@ -161,14 +165,17 @@ begin
     end;
     DM.runQuery(DM.cnn1, DM.qry1, 'insert into rm(norm,nama,norak) values('+
         QuotedStr(txtRM.Text)+','+QuotedStr(txtNama.Text)+','+QuotedStr(txtRak.Text)+')', eExecute);
-  end else                   
+  end else
   begin
-    DM.runQuery(DM.cnn1, DM.qry1, 'update rm set norm='+QuotedStr(txtRM.Text)+
-        ', nama='+QuotedStr(txtNama.Text)+
-        ', norak='+QuotedStr(txtRak.Text)+
+    DM.runQuery(DM.cnn1, DM.qry1, 'select idrm,lokasi from detil where idrm='+txtID.Text);
+    if DM.qry1.RecordCount <= 0 then
+    begin
+      DM.runQuery(DM.cnn1, DM.qry1, 'insert into detil(idrm,tanggal,lokasi,ada) values('+
+          txtID.Text+',now(),'+QuotedStr('BERKAS BARU')+',true)', eExecute);
+    end;
+    DM.runQuery(DM.cnn1, DM.qry1, 'update rm set norak='+QuotedStr(txtRak.Text)+
         ' where idrm='+txtID.Text, eExecute);
   end;
-  ShowMessage('Data berhasil disimpan!');
   btnBaru.Click;
   LoadData;
 end;
@@ -185,7 +192,6 @@ begin
     DM.runQuery(DM.cnn1, DM.qry1, 'delete from detil where idrm='+txtID.Text, eExecute);
   end;
   DM.runQuery(DM.cnn1, DM.qry1, 'delete from rm where idrm='+txtID.Text, eExecute);
-  ShowMessage('Data berhasil dihapus!');
   btnBaru.Click;
   LoadData;
 end;
