@@ -37,7 +37,7 @@ var
 
 implementation
 
-uses uBerkas, uDM;
+uses uBerkas, uDM, uMainForm;
 
 {$R *.dfm}
 
@@ -55,7 +55,7 @@ begin
     txtScan.Text:= '';
     Exit;
   end;
-  
+
   txtRM.Caption:= DM.qry1.FieldByName('norm').AsString;
   txtNama.Caption:= DM.qry1.FieldByName('nama').AsString;
   txtLokasi.Caption:= DM.qry1.FieldByName('lokasi').AsString;
@@ -77,6 +77,9 @@ begin
   if bKeluar then txtStatus.Caption:= '<<< KELUAR >>>'
   else txtStatus.Caption:= '>>> MASUK <<<';
   txtScan.Text:= '';
+
+  //note: refresh mainform
+  MainForm.LoadData;
 end;
 
 procedure TfrmBerkasScan.FormActivate(Sender: TObject);
