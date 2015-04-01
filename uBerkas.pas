@@ -176,6 +176,9 @@ begin
     DM.runQuery(DM.cnn1, DM.qry1, 'update rm set norak='+QuotedStr(txtRak.Text)+
         ' where idrm='+txtID.Text, eExecute);
   end;
+  //note: refresh mainform
+  MainForm.LoadData;
+
   btnBaru.Click;
   LoadData;
 end;
@@ -192,6 +195,10 @@ begin
     DM.runQuery(DM.cnn1, DM.qry1, 'delete from detil where idrm='+txtID.Text, eExecute);
   end;
   DM.runQuery(DM.cnn1, DM.qry1, 'delete from rm where idrm='+txtID.Text, eExecute);
+
+  //note: refresh mainform
+  MainForm.LoadData;
+
   btnBaru.Click;
   LoadData;
 end;
