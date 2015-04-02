@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ExtCtrls, ComCtrls, Menus, frxpngimage, sSkinManager,
-  Grids, AdvObj, BaseGrid, AdvGrid, DBAdvGrid, frxClass;
+  Grids, AdvObj, BaseGrid, AdvGrid, DBAdvGrid, frxClass, CPort;
 
 type
   TMainForm = class(TForm)
@@ -32,7 +32,9 @@ type
     lstResult: TAdvStringGrid;
     btnBerkasKeluarMasuk: TButton;
     frxReport1: TfrxReport;
+    ComPort1: TComPort;
     procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
     procedure tmrRefreshTimer(Sender: TObject);
     procedure btnRefreshClick(Sender: TObject);
     procedure btnBerkasKeluarMasukClick(Sender: TObject);
@@ -52,13 +54,32 @@ var
 
 implementation
 
-uses _uStringGrid, uDM, uBerkas, uBerkasMutasi, uBerkasScan, ADODB, DB;
+uses _uStringGrid, uDM, uBerkas, uBerkasMutasi, uBerkasScan, ADODB, DB,
+  DateUtils;
 
 {$R *.dfm}
 
 var
   __CFG_TIMER_INTERVAL: Integer;
   tmrCnt: Integer;
+
+procedure WriteCOM(TextToSend:string);
+begin
+  with MainForm.ComPort1 do
+  begin
+    Port:= 'COM11';
+    try
+      Open;
+    except
+      ShowSetupDialog;
+      Open;
+    end;
+
+    if not Connected then Exit;
+    WriteStr(TextToSend);
+    Sleep(200);
+  end;
+end;
 
 procedure TMainForm.LoadData();
 var
@@ -113,6 +134,7 @@ begin
   end;
 
   //note: load data untuk ditampilkan
+  WriteCOM('Z');
   DM.runQuery(DM.cnn1, DM.qry1, 'select idrm,norm,nama,lokasi,norak from rm where ada=true order by norm');
   with lstResult do
   begin
@@ -129,12 +151,14 @@ begin
         Cells[2,i]:= DM.qry1.Fields[2].AsString;
         Cells[3,i]:= DM.qry1.Fields[3].AsString;
         Cells[4,i]:= DM.qry1.Fields[4].AsString;
+        WriteCOM(Cells[4,i]+'AX');
         DM.qry1.Next;
       end;
     end;
   end;
 
   //todo: refresh lampu rak
+
   btnRefresh.Caption:= 'Finish!';
   btnRefresh.Enabled:=True;
   tmrRefresh.Enabled:=True;
@@ -147,6 +171,11 @@ begin
 
   //note: sembunyikan kolom idrm
   lstResult.HideColumn(0);
+end;
+
+procedure TMainForm.FormDestroy(Sender: TObject);
+begin
+  WriteCOM('Z');
 end;
 
 procedure TMainForm.tmrRefreshTimer(Sender: TObject);
