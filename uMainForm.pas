@@ -12,7 +12,6 @@ type
     MainMenu1: TMainMenu;
     File1: TMenuItem;
     Konfigurasi1: TMenuItem;
-    ResetLampu1: TMenuItem;
     Exit: TMenuItem;
     N1: TMenuItem;
     PengaturanBerkas1: TMenuItem;
@@ -38,10 +37,12 @@ type
     procedure tmrRefreshTimer(Sender: TObject);
     procedure btnRefreshClick(Sender: TObject);
     procedure btnBerkasKeluarMasukClick(Sender: TObject);
+    procedure lstResultDblClick(Sender: TObject);
+    procedure Konfigurasi1Click(Sender: TObject);
+    procedure ExitClick(Sender: TObject);
     procedure BerkasKeluarMasuk1Click(Sender: TObject);
     procedure ManajemenBerkas1Click(Sender: TObject);
     procedure MutasiBerkas1Click(Sender: TObject);
-    procedure lstResultDblClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -54,25 +55,29 @@ var
 
 implementation
 
-uses _uStringGrid, uDM, uBerkas, uBerkasMutasi, uBerkasScan, ADODB, DB,
-  DateUtils;
+uses _uStringGrid, _IniFiles, uDM, uBerkas, uBerkasMutasi, uBerkasScan, ADODB, DB,
+  DateUtils, uKonfigurasi;
 
 {$R *.dfm}
 
 var
-  __CFG_TIMER_INTERVAL: Integer;
+  vIni: TMyIni;
   tmrCnt: Integer;
 
 procedure WriteCOM(TextToSend:string);
 begin
   with MainForm.ComPort1 do
   begin
-    Port:= 'COM11';
+    Port:= vIni.Read('COMPort','port','COM1');
     try
       Open;
     except
       ShowSetupDialog;
-      Open;
+      try
+        Open;
+      finally
+        vIni.Write('COMPort','Port',Port);
+      end;
     end;
 
     if not Connected then Exit;
@@ -157,17 +162,15 @@ begin
     end;
   end;
 
-  //todo: refresh lampu rak
-
   btnRefresh.Caption:= 'Finish!';
   btnRefresh.Enabled:=True;
   tmrRefresh.Enabled:=True;
-  tmrCnt:= __CFG_TIMER_INTERVAL;
+  tmrCnt:= StrToInt(vIni.Read('Timer','Refresh','20'));
 end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
-  __CFG_TIMER_INTERVAL:= 20;
+  vIni:= TMyIni.Create;
 
   //note: sembunyikan kolom idrm
   lstResult.HideColumn(0);
@@ -176,6 +179,7 @@ end;
 procedure TMainForm.FormDestroy(Sender: TObject);
 begin
   WriteCOM('Z');
+  vIni.Free;
 end;
 
 procedure TMainForm.tmrRefreshTimer(Sender: TObject);
@@ -189,9 +193,25 @@ begin
   LoadData;
 end;
 
+procedure TMainForm.lstResultDblClick(Sender: TObject);
+begin
+  //note: tampilkan data yang terseleksi pada form manajemen berkas
+  frmBerkas.CariBerkas(lstResult.Cells[0, lstResult.Row]);
+end;
+
 procedure TMainForm.btnBerkasKeluarMasukClick(Sender: TObject);
 begin
   frmBerkasScan.ShowModal;
+end;
+
+procedure TMainForm.Konfigurasi1Click(Sender: TObject);
+begin
+  frmKonfigurasi.ShowModal;
+end;
+
+procedure TMainForm.ExitClick(Sender: TObject);
+begin
+  Close;
 end;
 
 procedure TMainForm.BerkasKeluarMasuk1Click(Sender: TObject);
@@ -207,12 +227,6 @@ end;
 procedure TMainForm.MutasiBerkas1Click(Sender: TObject);
 begin
   frmBerkasMutasi.ShowModal;
-end;
-
-procedure TMainForm.lstResultDblClick(Sender: TObject);
-begin
-  //note: tampilkan data yang terseleksi pada form manajemen berkas
-  frmBerkas.CariBerkas(lstResult.Cells[0, lstResult.Row]);
 end;
 
 end.

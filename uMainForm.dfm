@@ -1,6 +1,6 @@
 object MainForm: TMainForm
-  Left = 199
-  Top = 117
+  Left = 202
+  Top = 122
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Indikator Rekam Medis Analog'
@@ -756,11 +756,9 @@ object MainForm: TMainForm
     Top = 8
     object File1: TMenuItem
       Caption = '&File'
-      object ResetLampu1: TMenuItem
-        Caption = '&Reset Lampu'
-      end
       object Konfigurasi1: TMenuItem
         Caption = '&Konfigurasi...'
+        OnClick = Konfigurasi1Click
       end
       object N1: TMenuItem
         Caption = '-'
@@ -768,6 +766,7 @@ object MainForm: TMainForm
       object Exit: TMenuItem
         Caption = 'E&xit'
         ShortCut = 32883
+        OnClick = ExitClick
       end
     end
     object PengaturanBerkas1: TMenuItem
