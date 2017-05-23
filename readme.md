@@ -9,4 +9,4 @@ Alat ini membutuhkan microcontroller yang dibuat dengan IC ATMEL AT89S51
 ---
 
 ### Teknologi yang digunakan :
-* Microsoft Visual Basic 6.0
+* Borland Delphi 7
